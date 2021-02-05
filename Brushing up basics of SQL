@@ -1,0 +1,57 @@
+show databases ;
+create database amazon;
+show databases;
+use amazon ;
+
+
+-- create table customers (customerNumber int primary key, customerName varchar(20) , 
+phone varchar(10) , city varchar(20) ,state varchar(20) ,postalCode int,country varchar(10) );
+desc customers;
+truncate customers;
+alter table customers add column continent varchar(15);
+desc customers;
+alter table customers drop column country ;
+desc customers;
+alter table customers add column country varchar(20);
+desc customers;
+alter table customers phone primary key ;
+alter table customers rename column country to temp;
+desc customers;
+alter table customers rename column continent to temp1;
+alter table customers rename column temp to continent;
+alter table customers rename column temp1 to country;
+desc customers;
+alter table customers modify column phone int;
+desc customers;
+alter table customers add tehsil varchar(10);
+desc customers;
+alter table customers drop column tehsil;
+desc customers;
+alter table customers modify column continent varchar(50) NOT NULL;
+desc customers;
+alter table customers modify column phone int UNIQUE;
+alter table customers modify column phone int NULL;
+
+
+
+-- create another table named 'orders'
+
+create table orders (orderNumber varchar(10) , orderDate date , customerNumber int , primary key (orderNumber) , 
+UNIQUE(orderDate) );
+desc orders;
+
+
+
+-- create another table named 'payments'
+
+create table payments (customerNumber int primary key ,checkNumber varchar(10) NOT NULL UNIQUE, 
+amount int check (amount between 10 and 20) , country varchar (10)  check(country like 'india' ) ,UNIQUE(customerNumber,amount) );
+
+desc payments;
+
+insert into payments values (1,'CH1' , 11,'india');
+select * from payments;
+insert into payments values (2,'CH2', NULL ,'india');
+insert into payments (customerNumber,checkNumber,country) values (3,'CH3','india');
+alter table payments modify column amount int default 15;
+insert into payments (customerNumber,checkNumber,country) values (5,'CH10','india');
