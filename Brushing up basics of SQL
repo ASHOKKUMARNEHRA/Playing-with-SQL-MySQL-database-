@@ -55,3 +55,185 @@ insert into payments values (2,'CH2', NULL ,'india');
 insert into payments (customerNumber,checkNumber,country) values (3,'CH3','india');
 alter table payments modify column amount int default 15;
 insert into payments (customerNumber,checkNumber,country) values (5,'CH10','india');
+
+
+
+------------------------------------------------##############################################################################---------------------------------------------------
+
+
+
+show databases;
+use amazon;
+show tables;
+create database sample;
+show databases;
+use classicmodels;
+show tables;
+select * from orders order by customerNumber;
+select * from orders where customerNumber IN
+(select distinct(customerNumber) from orders where customerNumber between 103 and 112 order by customerNumber); 
+
+
+
+show databases;
+use amazon;
+show tables;
+desc customers;
+insert into customers values(1,'ashok',1234567890,'jjn','RAJ',333028,'india','asia');
+insert into customers values(2,'abh',1234568990,'jjn','RAJ',333028,'india','asia');
+insert into customers values(3,'amit',1234567790,'jjn','RAJ',333028,'india','asia');
+insert into customers values(4,'ashish',1234557890,'jjn','RAJ',333028,'india','asia');
+select * from customers;
+drop table customers;
+select * from payments;
+update payments set amount = 19 where customerNumber  = 1;
+
+use classicmodels;
+select orderNumber ,orderLineNumber , quantityOrdered * priceEach from orderdetails 
+order by quantityOrdered * priceEach DESC;
+desc orderdetails;
+select * from orderdetails;
+
+select distinct(status) from orders;
+
+select orderNumber , status from orders order by 
+field(status , 'In Progress', 'On Hold' , 'Cancelled' , 'Resolved' , 'Disputed' , 'Shipped' );
+
+
+SELECT 
+    orderNumber, 
+    status
+FROM
+    orders
+ORDER BY 
+    FIELD(status,
+        'In Process',
+        'On Hold',
+        'Cancelled',
+        'Resolved',
+        'Disputed',
+        'Shipped');
+        
+        
+select * from orders;
+select distinct shippedDate status  from orders;    
+
+select * from orderdetails;
+select * from orders;
+select * from orders where requireddate between cast('2003-01-06' as DATE)  and cast('2003-01-31' as DATE); 
+select * from orders LIMIT 3 offset 1;
+
+use amazon;
+show tables;
+create table customers (emp_id int auto_increment , emp_name varchar(10) , primary key (emp_id) );
+insert into customers (emp_name) values ('arman');
+select * from customers;
+
+show tables;
+select * from orders;
+select status , count(status) from orders group by status;
+
+select o.status , SUM(od.quantityOrdered * od.priceEach) from orders as o 
+join orderDetails as od on o.orderNumber = od.orderNumber group by o.status;
+
+select status , SUM(quantityOrdered * priceEach) from orders 
+inner join orderDetails using (orderNumber) group by status;
+
+select o.status , SUM(od.quantityOrdered * od.priceEach) from orders as o 
+join orderDetails as od using (orderNumber) group by o.status;
+
+select YEAR(o.orderDate) AS year , SUM(od.quantityOrdered * od.priceEach) from orders as o 
+join orderDetails as od on o.orderNumber = od.orderNumber group by year having year > 2003;
+
+SELECT status, COUNT(*)
+FROM orders GROUP BY status ;
+
+select MIN(items) ,MAX(items) , FLOOR(AVG(items)) from
+(select orderNumber ,count(orderNumber) as items from orderdetails group by orderNumber) as temp;
+
+use amazon;
+show tables;
+
+create table employee
+(emp_id int , emp_name varchar(20) , city varchar(20) ,
+primary key (emp_id) , UNIQUE(emp_name,city) ,check(city like 'A') , check (emp_name like 'A%') ); 
+desc employee;
+
+insert into employee values (1,'As','A');
+
+select * from employee;
+
+show tables;
+show databases;
+use classicmodels;
+
+show tables;
+select * from customers;
+select * from orders;
+
+select DISTINCT t1.customerNumber,t1.customerName from customers as t1
+ join orders as t2 on t1.customerNumber = t2.customerNumber;
+ 
+ select t1.customerNumber,t1.customerName from customers as t1
+ join orders as t2 on t1.customerNumber = t2.customerNumber group by (t1.customerNumber);
+ 
+ select customerNumber,customerName from customers where customerNumber in 
+ (select customerNumber from orders where customers.customerNumber = orders.customerNumber);
+ 
+ select customerNumber ,customerName from customers where exists
+ (select 1 from orders where customers.customerNumber = orders.customerNumber);
+ 
+ select * from orders where exists ();
+ 
+ explain select * from orders;
+ 
+ show tables;
+ drop table if exists ASHOK;
+ 
+create table emp1(id int primary key);
+create table emp2(id int primary key);
+insert into emp1 values (1);
+insert into emp2 values (2),(3),(4);
+select * from emp1;
+select * from emp2;
+insert into emp2 values (1); 
+select * from emp1 UNION ALL select * from emp2;
+select * from emp1 UNION select * from emp2;
+select * from emp1 UNION distinct select * from emp2;
+
+select * from customers;
+select * from employees;
+
+
+
+select concat(contactlastname,' ',contactfirstname) as FULL_NAME from custoMers
+union
+select concat(lastname,' ',firstName)
+from employeeS
+order by full_name;
+
+create table emp3 like emp2;
+insert into emp3 values (10);
+insert into emp2 (select * from emp3);
+
+select id from emp2 where id NOT IN (select id from emp1);
+
+create table emp4 (id INT(3) );
+insert into emp4 values (10000);
+select * from emp4;
+
+select true;
+create table emp5 (emp_id int , completed BOOLEAN NOT NULL, primary key(emp_id) );
+desc emp5;
+select now();
+select (date(now())); 
+
+create table emp6 (emp_id int primary key auto_increment ,q1 int ,q2 int ,q3 int,q4 int);
+insert into emp6 values (1,2,3,4,5),(2,4,5,6,7);
+select * from emp6;
+select emp_id ,least(q1,q2,q3,q4),greatest(q1,q2,q3,q4) from emp6;
+insert into emp6 values (4,2,3,4,NULL);
+select emp_id ,least(ifnull(q1,0),ifnull(q2,0),ifnull(q3,0),ifnull(q4,0)) from emp6; 
+
+select coalesce(NULL,NULL,290,0,0,NULL);
+
